@@ -4,7 +4,7 @@
 
 ## See Live
 
-- [here](https://grocey-budy-jp.netlify.app)
+- [here](https://grocery-bud-jp.netlify.app/)
 
 # Getting Started with Create React App
 
