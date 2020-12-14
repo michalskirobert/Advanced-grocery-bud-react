@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import List from "./List";
 import Alert from "./Alert";
+import { SetCategory } from "./setCategory";
 
 const getLocalStorage = () => {
   let list = localStorage.getItem("list");
@@ -13,14 +14,15 @@ const getLocalStorage = () => {
 
 function App() {
   const [name, setName] = useState("");
-  const [pieces, setPieces] = useState(0);
-  const [cost, setCost] = useState(0);
+  const [pieces, setPieces] = useState("");
+  const [cost, setCost] = useState("");
   const [category, setCategory] = useState("");
   const [list, setList] = useState(getLocalStorage());
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
   const [currency, setCurrency] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name) {
@@ -38,7 +40,7 @@ function App() {
       setEditID(null);
       setIsEditing(false);
       showAlert(true, "success", "value changed");
-      setCategory(null);
+      setCategory("");
       setCost("");
       setPieces("");
     } else {
@@ -56,7 +58,8 @@ function App() {
       setName("");
       setCost("");
       setPieces("");
-      setCategory(null);
+      setCategory("");
+      filterCategories("All");
     }
   };
 
@@ -100,6 +103,15 @@ function App() {
     );
   };
 
+  const filterCategories = (category) => {
+    if (category === "All") {
+      setFilteredItems(list);
+    } else {
+      const setCategory = list.filter((item) => item.category === category);
+      setFilteredItems(setCategory);
+    }
+  };
+
   return (
     <main>
       <section className="container">
@@ -112,6 +124,9 @@ function App() {
                 list.filter((length) => length.completed === true).length +
                 " Things"}
             </h4>
+          </div>
+          <div class="category">
+            <SetCategory filterCategories={filterCategories} />
           </div>
           <form className="form" onSubmit={handleSubmit}>
             {alert.show && (
@@ -130,14 +145,24 @@ function App() {
             </div>
             <div className="form-control">
               <label htmlFor="pieces">Pieces:</label>
+              <input
+                type="number"
+                className="grocery"
+                placeholder="How many pices?"
+                value={pieces}
+                id="pieces"
+                onChange={(e) => setPieces(e.target.value)}
+              />
+            </div>
+            <div className="form-control">
+              <label htmlFor="cost">Cost:</label>
               <div className="currency">
                 <input
                   type="number"
                   className="grocery"
-                  placeholder="How many pices?"
-                  value={pieces}
-                  id="pieces"
-                  onChange={(e) => setPieces(e.target.value)}
+                  placeholder="How much?"
+                  value={cost}
+                  onChange={(e) => setCost(e.target.value)}
                 />
                 <select
                   name="currency"
@@ -150,16 +175,6 @@ function App() {
                   <option value="₩">WON</option>
                 </select>
               </div>
-            </div>
-            <div className="form-control">
-              <label htmlFor="cost">Cost:</label>
-              <input
-                type="number"
-                className="grocery"
-                placeholder="How much?"
-                value={cost}
-                onChange={(e) => setCost(e.target.value)}
-              />
             </div>
             <div className="form-control">
               <label htmlFor="category">Category :</label>
@@ -200,6 +215,7 @@ function App() {
                 removeItem={removeItem}
                 editItem={editItem}
                 setComplete={setComplete}
+                filteredItems={filteredItems}
               />
               <b>
                 {list.reduce((total, product) => {

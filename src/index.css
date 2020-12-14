@@ -421,10 +421,6 @@ ul li a:hover {
   color: var(--clr-red-light);
 }
 
-article {
-  padding: 25px 0;
-}
-
 .container-buttons {
   display: flex;
   flex-flow: row wrap;
