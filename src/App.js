@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import List from "./List";
 import Alert from "./Alert";
-import { SetCategory } from "./setCategory";
 
 const getLocalStorage = () => {
   let list = localStorage.getItem("list");
@@ -22,7 +21,6 @@ function App() {
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
   const [currency, setCurrency] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name) {
@@ -59,7 +57,6 @@ function App() {
       setCost("");
       setPieces("");
       setCategory("");
-      filterCategories("All");
     }
   };
 
@@ -103,15 +100,6 @@ function App() {
     );
   };
 
-  const filterCategories = (category) => {
-    if (category === "All") {
-      setFilteredItems(list);
-    } else {
-      const setCategory = list.filter((item) => item.category === category);
-      setFilteredItems(setCategory);
-    }
-  };
-
   return (
     <main>
       <section className="container">
@@ -124,9 +112,6 @@ function App() {
                 list.filter((length) => length.completed === true).length +
                 " Things"}
             </h4>
-          </div>
-          <div class="category">
-            <SetCategory filterCategories={filterCategories} />
           </div>
           <form className="form" onSubmit={handleSubmit}>
             {alert.show && (
@@ -215,7 +200,6 @@ function App() {
                 removeItem={removeItem}
                 editItem={editItem}
                 setComplete={setComplete}
-                filteredItems={filteredItems}
               />
               <b>
                 {list.reduce((total, product) => {

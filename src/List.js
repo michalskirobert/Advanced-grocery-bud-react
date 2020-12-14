@@ -1,10 +1,10 @@
 import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdDone } from "react-icons/md";
-const List = ({ items, removeItem, editItem, setComplete, filteredItems }) => {
+const List = ({ items, removeItem, editItem, setComplete }) => {
   return (
     <div className="grocery-list">
-      {filteredItems.map((item) => {
+      {items.map((item) => {
         const { id, name, completed, pieces, cost, category, currency } = item;
         return (
           <article
